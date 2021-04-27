@@ -7,7 +7,7 @@ typedef struct Rena
     char nome[100];
     int peso;
     int idade;
-    float altura;
+    double altura;
 
 } Rena;
 
@@ -28,7 +28,8 @@ void criaHeap(Rena *vet, int i, int f)
             {
                 j = j + 1;
             }
-            else if (vet[j].peso == vet[j + 1].peso)
+
+            else if (vet[j].peso == vet[j + 1].peso && vet[j].idade != vet[j + 1].idade)
             {
                 if (vet[j].idade > vet[j + 1].idade)
                 {
@@ -36,7 +37,7 @@ void criaHeap(Rena *vet, int i, int f)
                 }
             }
 
-            else if (vet[j].peso == vet[j + 1].peso && vet[j].idade == vet[j + 1].idade)
+            else if (vet[j].peso == vet[j + 1].peso && vet[j].idade == vet[j + 1].idade && vet[j].altura != vet[j + 1].altura)
             {
                 if (vet[j].altura > vet[j + 1].altura)
                 {
@@ -52,6 +53,7 @@ void criaHeap(Rena *vet, int i, int f)
                 }
             }
         }
+
         if (aux.peso < vet[j].peso)
         {
             vet[i].peso = vet[j].peso;
@@ -63,46 +65,37 @@ void criaHeap(Rena *vet, int i, int f)
             j = 2 * i + 1;
         }
 
-        else if (aux.peso == vet[j].peso)
+        else if (aux.peso == vet[j].peso && aux.idade > vet[j].idade)
         {
-            if (aux.idade > vet[j].idade)
-            {
-                vet[i].peso = vet[j].peso;
-                vet[i].idade = vet[j].idade;
-                vet[i].altura = vet[j].altura;
-                strcpy(vet[i].nome, vet[j].nome);
+            vet[i].peso = vet[j].peso;
+            vet[i].idade = vet[j].idade;
+            vet[i].altura = vet[j].altura;
+            strcpy(vet[i].nome, vet[j].nome);
 
-                i = j;
-                j = 2 * i + 1;
-            }
+            i = j;
+            j = 2 * i + 1;
         }
 
-        else if (aux.peso == vet[j].peso && aux.idade == vet[j].idade)
+        else if (aux.peso == vet[j].peso && aux.idade == vet[j].idade && aux.altura > vet[j].altura)
         {
-            if (aux.altura > vet[j].altura)
-            {
-                vet[i].peso = vet[j].peso;
-                vet[i].idade = vet[j].idade;
-                vet[i].altura = vet[j].altura;
-                strcpy(vet[i].nome, vet[j].nome);
+            vet[i].peso = vet[j].peso;
+            vet[i].idade = vet[j].idade;
+            vet[i].altura = vet[j].altura;
+            strcpy(vet[i].nome, vet[j].nome);
 
-                i = j;
-                j = 2 * i + 1;
-            }
+            i = j;
+            j = 2 * i + 1;
         }
 
-        else if (aux.peso == vet[j].peso && aux.idade == vet[j].idade && aux.altura == vet[j].altura)
+        else if (aux.peso == vet[j].peso && aux.idade == vet[j].idade && aux.altura == vet[j].altura && aux.nome > vet[j].nome)
         {
-            if (aux.nome > vet[j].nome)
-            {
-                vet[i].peso = vet[j].peso;
-                vet[i].idade = vet[j].idade;
-                vet[i].altura = vet[j].altura;
-                strcpy(vet[i].nome, vet[j].nome);
+            vet[i].peso = vet[j].peso;
+            vet[i].idade = vet[j].idade;
+            vet[i].altura = vet[j].altura;
+            strcpy(vet[i].nome, vet[j].nome);
 
-                i = j;
-                j = 2 * i + 1;
-            }
+            i = j;
+            j = 2 * i + 1;
         }
 
         else
@@ -111,7 +104,6 @@ void criaHeap(Rena *vet, int i, int f)
         }
     }
     vet[i].peso = aux.peso;
-
     vet[i].idade = aux.idade;
     vet[i].altura = aux.altura;
     strcpy(vet[i].nome, aux.nome);
@@ -149,30 +141,31 @@ void heapSort(Rena *vet, int n)
 
 int main(void)
 {
-    int n_testes;
-    scanf("%d", &n_testes);
 
-    for (int a = 1; a <= n_testes; a++)
+    int nt, cc = 1;
+    scanf("%d", &nt);
+
+    for (nt = nt; nt > 0; nt--)
     {
-        int total_renas, total_renas_treno, cont = 1;
-        scanf("%d %d", &total_renas, &total_renas_treno);
-        int dif = total_renas - total_renas_treno;
+        int tr, trt, a, b, dif, cr = 1;
+        scanf("%d %d", &tr, &trt);
+        dif = tr - trt;
 
-        Rena renas[total_renas];
+        Rena renas[tr];
 
-        for (int b = total_renas; b > 0; b--)
+        for (a = 0; a < tr; a++)
         {
-            scanf("%s %d %d %f", &renas[b].nome, &renas[b].peso, &renas[b].idade, &renas[b].altura);
+            scanf("%s %d %d %lf", &renas[a].nome, &renas[a].peso, &renas[a].idade, &renas[a].altura);
         }
 
-        heapSort(&renas, total_renas);
+        heapSort(renas, tr);
 
-        printf("CENARIO {%d}\n", a);
-        for (int b = total_renas; b > dif; b--)
+        printf("CENARIO {%d}\n", cc);
+        for (b = tr - 1; b >= dif; b--)
         {
-
-            printf("%d - %s\n", cont, renas[b].nome);
-            cont++;
+            printf("%d - %s\n", cr, renas[b].nome);
+            cr++;
         }
+        cc++;
     }
 }
